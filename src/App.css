@@ -1,8 +1,11 @@
 .main-wrapper {
     display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
     justify-content: center;
+    gap: 10px;
     padding: 20px;
-    grid-template-columns: 1fr 1fr 1fr 1fr
+    max-width: 85vw;
+    margin: 0 auto;
 }
 
 header {
@@ -31,6 +34,23 @@ header {
     cursor: pointer;
 }
 
+.country-box {
+    display: flex;
+    align-items: flex-start; /* Change from 'center' to 'flex-start' */
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.country-box img {
+    width: 30px;
+    height: 20px;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+
 .country-button:hover {
     background-color: #45a049;
 }
@@ -47,4 +67,8 @@ header {
 
 .hide {
     display: none;
+}
+
+.country-box span {
+    word-wrap: break-word;
 }

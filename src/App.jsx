@@ -1,6 +1,13 @@
 import './App.css';
 import axios from 'axios';
 import {useState} from "react";
+import {
+    getMainWrapperClass,
+    longCountryNameHelper,
+    setCountryButtonHelper,
+    shouldDisplayCountries
+} from './helpers/countryHelpers';
+
 
 function App() {
     const [countries, setCountries] = useState([]);
@@ -10,7 +17,7 @@ function App() {
     async function fetchCountryData() {
         try {
             if (!countries.length) {
-                const result = await axios.get('https://restcountries.com/v3.1/all?fields=flag,name,population');
+                const result = await axios.get('https://restcountries.com/v3.1/all?fields=flags,name,population');
                 setCountries(result.data)
                 setShowCountries(true);
             } else {
@@ -21,26 +28,30 @@ function App() {
         }
     }
 
-    function setCountryHelper() {
-        return countries.length === 0 ? "Fetch All Countries" :
-            showCountries ? "Hide Country List" : "Set Country List"
-    }
 
     return (
         <>
             <header>
                 <button
                     onClick={fetchCountryData}
-                    className={`country-button ${countries.length !== 0 && showCountries ? "active" : ""}`}> {setCountryHelper()}
+                    className={`country-button ${shouldDisplayCountries(countries.length, showCountries) ? "active" : ""}`}>
+                    {setCountryButtonHelper(countries.length, showCountries)}
                 </button>
-
             </header>
-            <div className={`main-wrapper ${!showCountries ? "hide" : ""}`}>
-                {countries.length !== 0 && countries.map((country) => (
-                    <div className="countrylist" key={country.name.common}>
-                        {country.name.common}
-                    </div>
-                ))}
+            <div className={getMainWrapperClass(showCountries)}>
+                {shouldDisplayCountries(countries.length, showCountries) &&
+                    countries.map((country) => (
+                        <div className="countrylist" key={country.name.common}>
+                            <div className="country-box">
+                                <img src={country.flags.svg}
+                                     alt={country.flags.alt || `Vlag van ${country.name.common}`}/>
+                                <span title={longCountryNameHelper(country.name.common).fullName}>
+    {longCountryNameHelper(country.name.common).displayName}
+</span>
+                            </div>
+                        </div>
+                    ))
+                }
             </div>
         </>
     )
