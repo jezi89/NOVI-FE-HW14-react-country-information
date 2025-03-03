@@ -1,0 +1,50 @@
+.main-wrapper {
+    display: grid;
+    justify-content: center;
+    padding: 20px;
+    grid-template-columns: 1fr 1fr 1fr 1fr
+}
+
+header {
+    display: flex;
+    justify-content: center;
+}
+
+.country-button {
+
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.active {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff0616;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.country-button:hover {
+    background-color: #45a049;
+}
+
+.active:hover {
+    background-color: #f8070f;
+}
+
+.country-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.hide {
+    display: none;
+}
