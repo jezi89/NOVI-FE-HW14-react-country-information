@@ -1,74 +1,152 @@
-.main-wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-    justify-content: center;
-    gap: 10px;
-    padding: 20px;
-    max-width: 85vw;
+/* App.css - Cleaned and optimized */
+
+/* CSS Variables */
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #ff0616;
+    --text-color: white;
+    --border-color: #ddd;
+    --font-family: 'Roboto Condensed', sans-serif;
+    --spacing-sm: 10px;
+    --spacing-md: 20px;
+    --spacing-lg: 30px;
+    --spacing-xl: 40px;
+    --container-max-width: 85vw;
+    --grid-item-min-width: 210px;
+    --transition-duration: 0.8s;
+}
+
+/* Reset & Base Styles */
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+    overflow-x: hidden;
+}
+
+html {
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+}
+
+body {
+    margin-right: calc(100% - 100vw);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+/* Scroll State Classes */
+body.scrolling-manual {
+    scrollbar-width: auto;
+    -ms-overflow-style: auto;
+}
+
+body.scrolling-manual::-webkit-scrollbar {
+    display: block;
+    width: 10px;
+}
+
+body.scrolling-up {
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+body.scrolling-up::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+}
+
+/* Layout */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: var(--container-max-width);
+    width: 100%;
     margin: 0 auto;
 }
 
-header {
+.map-container {
+    width: 100%;
     display: flex;
     justify-content: center;
+    margin-bottom: -5em;
 }
 
+.map-container img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Button Containers */
+.btn-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: var(--spacing-md) 0;
+}
+
+/* Keep the initial button position the same but increase margin after scroll */
+.btn-wrapper.after-scroll {
+    margin-top: var(--spacing-xl);
+}
+
+.btn-wrapper.bottom-button {
+    margin: var(--spacing-lg) 0;
+}
+
+/* Button Styles */
 .country-button {
-
-    padding: 10px 20px;
+    padding: var(--spacing-sm) var(--spacing-md);
     font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
+    color: var(--text-color);
+    background-color: var(--primary-color);
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
-.active {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #ff0616;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+.country-button.active {
+    background-color: var(--secondary-color);
 }
 
+/* Country Grid */
+.main-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--grid-item-min-width), 1fr));
+    gap: 15px;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Country Items */
 .country-box {
     display: flex;
-    align-items: flex-start; /* Change from 'center' to 'flex-start' */
-    padding: 10px;
-    margin: 5px;
-    border: 1px solid #ddd;
+    align-items: center;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-color);
     border-radius: 4px;
 }
 
 .country-box img {
     width: 30px;
     height: 20px;
-    margin-right: 10px;
+    margin-right: var(--spacing-sm);
     object-fit: cover;
 }
 
-
-.country-button:hover {
-    background-color: #45a049;
-}
-
-.active:hover {
-    background-color: #f8070f;
-}
-
-.country-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
+/* Utilities */
 .hide {
     display: none;
 }
 
-.country-box span {
-    word-wrap: break-word;
+#content-spacer {
+    width: 100%;
+    transition: height var(--transition-duration) ease;
 }
