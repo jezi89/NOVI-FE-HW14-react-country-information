@@ -1,25 +1,25 @@
-import {useState} from 'react'; // Remove useEffect
+// src/App.jsx
+import {useRef, useState} from 'react';
 import './App.css';
 import axios from 'axios';
-import {longCountryNameHelper, shouldDisplayCountries} from './helpers/countryHelpers';
-import IMAGES from "./assets/Images.jsx";
-import CountryButton from "./assets/components/CountryButton.jsx";
-import {scrollToTop, smoothScrollTo} from './helpers/scrollHelper';
-import { useRef } from 'react';
-import ScrollIndicator from "./assets/components/ScrollIndicator.jsx";
+import {shouldDisplayCountries} from './helpers/countryHelpers';
+import CountryButton from "./assets/components/CountryButton/CountryButton.jsx";
+import {scrollToTop, smoothScrollTo} from './helpers/scrollHelper.js';
+import CountryGrid from './assets/components/CountryGrid/CountryGrid.jsx';
+import WorldMap from './assets/components/WorldMap/WorldMap.jsx';
 
 function App() {
     const [countries, setCountries] = useState([]);
     const [showCountries, setShowCountries] = useState(false);
     const contentRef = useRef(null);
-
+    const [isFullScreen, setIsFullScreen] = useState(false);
 
     async function fetchCountryData() {
         try {
             if (!countries.length) {
                 // First time loading countries
                 const result = await axios.get('https://restcountries.com/v3.1/all?fields=flags,name,population');
-                // Sort countries by population (low to high) before setting state
+                // Sort countries by population (high to low)
                 const sortedCountries = result.data.sort((b, a) =>
                     (a.population || 0) - (b.population || 0)
                 );
@@ -69,11 +69,18 @@ function App() {
         }
     }
 
+    function toggleFullScreen() {
+        setIsFullScreen(!isFullScreen);
+        // When entering full screen, make sure we're showing countries
+        if (!isFullScreen && !showCountries) {
+            setShowCountries(true);
+        }
+    }
+
     return (
+
         <div className="container">
-            <div className="map-container" id="map-section">
-                <img src={IMAGES.image3} alt="world map"/>
-            </div>
+            <WorldMap/>
 
             <div className={`btn-wrapper ${showCountries ? "after-scroll" : ""}`} id="button-section">
                 <CountryButton
@@ -84,43 +91,36 @@ function App() {
             </div>
 
             {shouldDisplayCountries(countries.length, showCountries) && (
-                <div className="main-wrapper" ref={contentRef}>
-                    {countries.map((country, index) => (
-                        <div className="countrylist" key={country.name.common}
-                             style={{animationDelay: `${index * 0.02}s`}}>
-                            <div className="country-wrapper">
-                                <div className="country-header">
-                                    <img src={country.flags.svg}
-                                         alt={country.flags.alt || `Vlag van ${country.name.common}`}/>
-                                    <span className="country-name"
-                                          title={longCountryNameHelper(country.name.common).fullName}>
-                                        {longCountryNameHelper(country.name.common).displayName}
-                                    </span>
-                                </div>
-
-                                <hr className="country-divider"/>
-
-                                <div className="country-population">
-                                    Has a population of {country.population?.toLocaleString() || "Unknown"} people
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                    <ScrollIndicator containerRef={contentRef} delay={3000} />
-                </div>
+                <CountryGrid
+                    countries={countries}
+                    contentRef={contentRef}
+                />
             )}
 
             {shouldDisplayCountries(countries.length, showCountries) && (
                 <div className="btn-wrapper bottom-button">
-                    <CountryButton
-                        onClick={fetchCountryData}
-                        countriesLength={countries.length}
-                        showCountries={showCountries}
-                        position="bottom"
-                    />
+                    <button
+                        className="full-screen-button"
+                        onClick={toggleFullScreen}>
+                        Show Full Screen
+                    </button>
                 </div>
             )}
             <div id="content-spacer" style={{height: 0}}></div>
+            {/* Add the full screen overlay component here */}
+            {isFullScreen && (
+                <div className="full-screen-overlay">
+                    <div className="full-screen-header">
+                        <button className="close-button" onClick={toggleFullScreen}>×</button>
+                    </div>
+                    <div className="full-screen-content">
+                        <CountryGrid
+                            countries={countries}
+                            contentRef={contentRef}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -1,79 +1,125 @@
-/* App.css - Cleaned and optimized */
+/* App.css - Cleaned up version */
 
-/* CSS Variables */
+/* CSS VARIABLES */
 :root {
+    /* Colors */
     --primary-color: #4CAF50;
     --secondary-color: #ff0616;
     --text-color: white;
     --border-color: #ddd;
+    --background-color: white;
+
+    /* Typography */
     --font-family: 'Roboto Condensed', sans-serif;
+
+    /* Spacing */
     --spacing-sm: 10px;
     --spacing-md: 20px;
     --spacing-lg: 30px;
     --spacing-xl: 40px;
-    --container-max-width: 85vw;
-    --grid-item-min-width: 210px;
+
+    /* Layout */
+    --container-max-width: 1400px;
+
+    /* Animation */
     --transition-duration: 0.8s;
 }
 
+/* GLOBAL STYLES */
 html, body {
     margin: 0;
     padding: 0;
     font-family: var(--font-family);
     overflow-x: hidden;
-    scrollbar-width: none;  /* Firefox */
-    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
 body::-webkit-scrollbar {
     display: none;
 }
 
-/* Layout */
+/* LAYOUT STRUCTURE */
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
     max-width: var(--container-max-width);
-    width: 100%;
     margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
-.map-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    /* Adjust this to prevent white space at bottom */
-    margin-bottom: -2em;
-    position: relative;
-    z-index: 1;
-}
-
-.map-container::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
+/* FULL SCREEN LAYOUT */
+/* Add this to App.css */
+.full-screen-overlay {
+    position: fixed;
+    top: 0;
     left: 0;
-    right: 0;
-    height: 40px;
-    background: linear-gradient(to bottom, transparent, white);
-    z-index: 2;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index: 1000;
+    overflow-y: auto;
 }
 
-.map-container img {
-    max-width: 100%;
-    height: auto;
+.full-screen-header {
+    padding: 15px;
+    display: flex;
+    justify-content: flex-end;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1001;
 }
 
-/* Button Containers */
+.close-button {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--primary-color);
+}
+
+.full-screen-content {
+    padding: 10px;
+}
+
+.full-screen-content .country-grid {
+    max-width: 95%; /* Even wider in fullscreen */
+    max-height: 90vh; /* Use more vertical space in fullscreen */
+    padding: 5px; /* Minimal padding in fullscreen */
+}
+
+/* Fix for right-side borders */
+.country-item {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.full-screen-button {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* BUTTON WRAPPER STYLES */
 .btn-wrapper {
     display: flex;
     justify-content: center;
     width: 100%;
     margin: var(--spacing-md) 0;
     position: relative;
-    z-index: 3; /* Higher than map-container::after */
+    z-index: 3;
     transition: margin var(--transition-duration) ease;
 }
 
@@ -81,162 +127,16 @@ body::-webkit-scrollbar {
     margin-top: var(--spacing-xl);
 }
 
-.country-button {
-    /* Add transition for the button itself */
-    transition: background-color 0.3s ease;
-}
-
 .btn-wrapper.bottom-button {
     margin: var(--spacing-lg) 0;
 }
 
-.fixed-button-container {
-    height: 60px; /* Set a consistent height */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    position: relative;
-}
-
-/* Button Styles */
-.country-button {
-    padding: var(--spacing-sm) var(--spacing-md);
-    font-size: 16px;
-    color: var(--text-color);
-    background-color: var(--primary-color);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transform: translateY(0);
-    transition: all 0.3s ease;
-}
-
-.country-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.country-button.active {
-    background-color: var(--secondary-color);
-    transform: translateY(0);
-}
-
-
-/* Country Grid */
-.main-wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Wider items */
-    gap: 20px;
-    width: 95%; /* Wider grid overall */
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-/* Country Items */
-
-.country-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: var(--spacing-md);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    height: 85px; /* Fixed height for consistent boxes */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    overflow: hidden; /* Prevent content overflow */
-}
-
-.country-wrapper:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Top section with flag and name */
-.country-header {
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-.country-header img {
-    width: 30px;
-    height: 20px;
-    margin-right: var(--spacing-sm);
-    object-fit: cover;
-    flex-shrink: 0; /* Prevent flag from shrinking */
-}
-
-.country-name {
-    font-weight: bold;
-    white-space: nowrap; /* Prevent line breaks in names */
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-
-.country-box {
-    display: flex;
-    flex-flow: row wrap;
-    align-items: center;
-    padding: var(--spacing-sm);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.country-box:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Divider line */
-.country-divider {
-    width: 100%;
-    margin: 10px 0;
-    border: none;
-    height: 1px;
-    background: var(--border-color);
-}
-
-/* Population section */
-.country-population {
-    width: 100%;
-    font-size: 0.9em;
-    color: #666;
-}
-
-/* Add a staggered animation when countries appear */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.countrylist {
-    animation: fadeIn 0.5s ease forwards;
-    opacity: 0;
-}
-
-.country-box img {
-    width: 30px;
-    height: 20px;
-    margin-right: var(--spacing-sm);
-    object-fit: cover;
-}
-
-/* Utilities */
-.hide {
-    display: none;
-}
-
+/* UTILITIES */
 #content-spacer {
     width: 100%;
     transition: height var(--transition-duration) ease;
+}
+
+.hide {
+    display: none;
 }
