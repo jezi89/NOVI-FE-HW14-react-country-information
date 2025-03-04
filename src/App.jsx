@@ -17,18 +17,13 @@ function App() {
     async function fetchCountryData() {
         try {
             if (!countries.length) {
-                // First time loading countries
-                const result = await axios.get('https://restcountries.com/v3.1/all?fields=flags,name,population');
-                // Sort countries by population (high to low)
-                const sortedCountries = result.data.sort((b, a) =>
+                const result = await axios.get('https://restcountries.com/v3.1/all?fields=flags,name,population,continents');
+                const sortedCountries = result.data.sort((a, b) =>
                     (a.population || 0) - (b.population || 0)
                 );
                 setCountries(sortedCountries);
-
-                // Add a small delay before showing countries to make transition smoother
                 setTimeout(() => {
                     setShowCountries(true);
-                    // Smooth scroll to button
                     setTimeout(() => {
                         smoothScrollTo({
                             targetId: "button-section",
@@ -37,25 +32,18 @@ function App() {
                     }, 50);
                 }, 100);
             } else {
-                // Toggle countries visibility with improved transition
                 const willShow = !showCountries;
-
                 if (!willShow) {
-                    // When hiding countries, scroll first
                     scrollToTop(() => {
-                        // Add a small delay before state change to improve transition
                         setTimeout(() => {
                             setShowCountries(false);
-                            // Remove spacer gradually
                             setTimeout(() => {
                                 document.getElementById("content-spacer").style.height = "0";
                             }, 100);
                         }, 100);
                     });
                 } else {
-                    // When showing countries
                     setShowCountries(true);
-                    // Position button with a slight delay for smooth transition
                     setTimeout(() => {
                         smoothScrollTo({
                             targetId: "button-section",

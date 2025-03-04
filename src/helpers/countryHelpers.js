@@ -6,9 +6,6 @@ export function shouldDisplayCountries(countriesLength, showCountries) {
     return hasCountries(countriesLength) && showCountries;
 }
 
-export function getMainWrapperClass(showCountries) {
-    return `main-wrapper ${!showCountries ? "hide" : ""}`;
-}
 
 export function longCountryNameHelper(name) {
     const isLong = name.length > 25;
