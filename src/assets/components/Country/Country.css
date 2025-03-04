@@ -10,8 +10,9 @@
     padding: 15px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    min-height: 120px;
+    min-height: 150px; /* Verhoog minimum hoogte */
     height: auto;
+    max-height: fit-content;
     box-sizing: border-box;
     background-color: var(--background-color);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -54,11 +55,11 @@
 
 .country-population {
     width: 100%;
-    font-size: 0.9em;
+    font-size: 1.2em;
     color: #666;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    hyphens: auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     line-height: 1.3;
 }
 

@@ -19,7 +19,7 @@ function App() {
             if (!countries.length) {
                 const result = await axios.get('https://restcountries.com/v3.1/all?fields=flags,name,population,continents');
                 const sortedCountries = result.data.sort((a, b) =>
-                    (a.population || 0) - (b.population || 0)
+                    (b.population || 0) - (a.population || 0)
                 );
                 setCountries(sortedCountries);
                 setTimeout(() => {

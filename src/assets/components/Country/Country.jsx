@@ -23,7 +23,7 @@ function Country({country, index}) {
                 </div>
                 <hr className="country-divider"/>
                 <div className="country-population">
-                    Has a population of {country.population?.toLocaleString() || "Unknown"} people
+                    Has a population of <br /> {country.population?.toLocaleString() || "Unknown"} people
                 </div>
             </div>
         </div>
