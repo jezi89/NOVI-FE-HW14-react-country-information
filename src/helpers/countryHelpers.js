@@ -11,9 +11,9 @@ export function getMainWrapperClass(showCountries) {
 }
 
 export function longCountryNameHelper(name) {
-    const isLong = name.length > 20;
+    const isLong = name.length > 25;
     return {
-        displayName: isLong ? name.substring(0, 20) + "..." : name,
+        displayName: isLong ? name.substring(0, 24) + "..." : name,
         fullName: name,
         isLong: isLong
     };

@@ -16,49 +16,18 @@
     --transition-duration: 0.8s;
 }
 
-/* Reset & Base Styles */
 html, body {
     margin: 0;
     padding: 0;
     font-family: var(--font-family);
     overflow-x: hidden;
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
 }
 
-html {
-    overflow-y: scroll;
-    scrollbar-gutter: stable;
-}
-
-body {
-    margin-right: calc(100% - 100vw);
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
+/* Hide scrollbar for Chrome, Safari and Opera */
 body::-webkit-scrollbar {
     display: none;
-}
-
-/* Scroll State Classes */
-body.scrolling-manual {
-    scrollbar-width: auto;
-    -ms-overflow-style: auto;
-}
-
-body.scrolling-manual::-webkit-scrollbar {
-    display: block;
-    width: 10px;
-}
-
-body.scrolling-up {
-    overflow-y: hidden !important;
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-}
-
-body.scrolling-up::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
 }
 
 /* Layout */
@@ -75,7 +44,21 @@ body.scrolling-up::-webkit-scrollbar {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: -5em;
+    /* Adjust this to prevent white space at bottom */
+    margin-bottom: -2em;
+    position: relative;
+    z-index: 1;
+}
+
+.map-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(to bottom, transparent, white);
+    z-index: 2;
 }
 
 .map-container img {
@@ -89,15 +72,31 @@ body.scrolling-up::-webkit-scrollbar {
     justify-content: center;
     width: 100%;
     margin: var(--spacing-md) 0;
+    position: relative;
+    z-index: 3; /* Higher than map-container::after */
+    transition: margin var(--transition-duration) ease;
 }
 
-/* Keep the initial button position the same but increase margin after scroll */
 .btn-wrapper.after-scroll {
     margin-top: var(--spacing-xl);
 }
 
+.country-button {
+    /* Add transition for the button itself */
+    transition: background-color 0.3s ease;
+}
+
 .btn-wrapper.bottom-button {
     margin: var(--spacing-lg) 0;
+}
+
+.fixed-button-container {
+    height: 60px; /* Set a consistent height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
 }
 
 /* Button Styles */
@@ -109,29 +108,120 @@ body.scrolling-up::-webkit-scrollbar {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+    transition: all 0.3s ease;
+}
+
+.country-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .country-button.active {
     background-color: var(--secondary-color);
+    transform: translateY(0);
 }
+
 
 /* Country Grid */
 .main-wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--grid-item-min-width), 1fr));
-    gap: 15px;
-    width: 90%;
-    max-width: 1200px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Wider items */
+    gap: 20px;
+    width: 95%; /* Wider grid overall */
+    max-width: 1400px;
     margin: 0 auto;
 }
 
 /* Country Items */
+
+.country-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    height: 85px; /* Fixed height for consistent boxes */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden; /* Prevent content overflow */
+}
+
+.country-wrapper:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Top section with flag and name */
+.country-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.country-header img {
+    width: 30px;
+    height: 20px;
+    margin-right: var(--spacing-sm);
+    object-fit: cover;
+    flex-shrink: 0; /* Prevent flag from shrinking */
+}
+
+.country-name {
+    font-weight: bold;
+    white-space: nowrap; /* Prevent line breaks in names */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
 .country-box {
     display: flex;
+    flex-flow: row wrap;
     align-items: center;
     padding: var(--spacing-sm);
     border: 1px solid var(--border-color);
     border-radius: 4px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.country-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Divider line */
+.country-divider {
+    width: 100%;
+    margin: 10px 0;
+    border: none;
+    height: 1px;
+    background: var(--border-color);
+}
+
+/* Population section */
+.country-population {
+    width: 100%;
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Add a staggered animation when countries appear */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.countrylist {
+    animation: fadeIn 0.5s ease forwards;
+    opacity: 0;
 }
 
 .country-box img {

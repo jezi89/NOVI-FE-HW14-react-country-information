@@ -1,40 +1,17 @@
+import {useState} from 'react'; // Remove useEffect
 import './App.css';
 import axios from 'axios';
-import {useEffect, useState} from "react";
-import {getMainWrapperClass, longCountryNameHelper, shouldDisplayCountries} from './helpers/countryHelpers';
+import {longCountryNameHelper, shouldDisplayCountries} from './helpers/countryHelpers';
 import IMAGES from "./assets/Images.jsx";
 import CountryButton from "./assets/components/CountryButton.jsx";
 import {scrollToTop, smoothScrollTo} from './helpers/scrollHelper';
+import { useRef } from 'react';
+import ScrollIndicator from "./assets/components/ScrollIndicator.jsx";
 
 function App() {
     const [countries, setCountries] = useState([]);
     const [showCountries, setShowCountries] = useState(false);
-
-    useEffect(() => {
-        // Show scrollbar only during manual scrolling
-        let scrollTimer;
-
-        const handleScroll = () => {
-            // Skip if we're in the middle of programmatic scrolling
-            if (document.body.classList.contains('scrolling-up')) return;
-
-            // Show scrollbar during manual scrolling
-            document.body.classList.add('scrolling-manual');
-
-            // Hide scrollbar after scrolling stops
-            clearTimeout(scrollTimer);
-            scrollTimer = setTimeout(() => {
-                document.body.classList.remove('scrolling-manual');
-            }, 1000);
-        };
-
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-            clearTimeout(scrollTimer);
-        };
-    }, []);
+    const contentRef = useRef(null);
 
 
     async function fetchCountryData() {
@@ -42,38 +19,47 @@ function App() {
             if (!countries.length) {
                 // First time loading countries
                 const result = await axios.get('https://restcountries.com/v3.1/all?fields=flags,name,population');
-                setCountries(result.data);
-                setShowCountries(true);
+                // Sort countries by population (low to high) before setting state
+                const sortedCountries = result.data.sort((b, a) =>
+                    (a.population || 0) - (b.population || 0)
+                );
+                setCountries(sortedCountries);
 
-                // Smooth scroll to button after countries are loaded
+                // Add a small delay before showing countries to make transition smoother
                 setTimeout(() => {
-                    smoothScrollTo({
-                        targetId: "button-section",
-                        offset: 30 // Less offset means button appears higher
-                    });
+                    setShowCountries(true);
+                    // Smooth scroll to button
+                    setTimeout(() => {
+                        smoothScrollTo({
+                            targetId: "button-section",
+                            offset: 30
+                        });
+                    }, 50);
                 }, 100);
             } else {
-                // Toggle countries visibility
+                // Toggle countries visibility with improved transition
                 const willShow = !showCountries;
 
                 if (!willShow) {
-                    // When hiding countries, scroll to top first
+                    // When hiding countries, scroll first
                     scrollToTop(() => {
-                        setShowCountries(false);
-
-                        // Remove spacer gradually
+                        // Add a small delay before state change to improve transition
                         setTimeout(() => {
-                            document.getElementById("content-spacer").style.height = "0";
-                        }, 200);
+                            setShowCountries(false);
+                            // Remove spacer gradually
+                            setTimeout(() => {
+                                document.getElementById("content-spacer").style.height = "0";
+                            }, 100);
+                        }, 100);
                     });
                 } else {
                     // When showing countries
                     setShowCountries(true);
-                    // Scroll to button after DOM update
+                    // Position button with a slight delay for smooth transition
                     setTimeout(() => {
                         smoothScrollTo({
                             targetId: "button-section",
-                            offset: 30 // Makes the jump end higher than the container line
+                            offset: 30
                         });
                     }, 100);
                 }
@@ -97,22 +83,33 @@ function App() {
                 />
             </div>
 
-            <div id="country-list" className={getMainWrapperClass(showCountries)}>
-                {shouldDisplayCountries(countries.length, showCountries) &&
-                    countries.map((country) => (
-                        <div className="countrylist" key={country.name.common}>
-                            <div className="country-box">
-                                <img src={country.flags.svg}
-                                     alt={country.flags.alt || `Vlag van ${country.name.common}`}/>
-                                <span title={longCountryNameHelper(country.name.common).fullName}>
-                                    {longCountryNameHelper(country.name.common).displayName}
-                                </span>
+            {shouldDisplayCountries(countries.length, showCountries) && (
+                <div className="main-wrapper" ref={contentRef}>
+                    {countries.map((country, index) => (
+                        <div className="countrylist" key={country.name.common}
+                             style={{animationDelay: `${index * 0.02}s`}}>
+                            <div className="country-wrapper">
+                                <div className="country-header">
+                                    <img src={country.flags.svg}
+                                         alt={country.flags.alt || `Vlag van ${country.name.common}`}/>
+                                    <span className="country-name"
+                                          title={longCountryNameHelper(country.name.common).fullName}>
+                                        {longCountryNameHelper(country.name.common).displayName}
+                                    </span>
+                                </div>
+
+                                <hr className="country-divider"/>
+
+                                <div className="country-population">
+                                    Has a population of {country.population?.toLocaleString() || "Unknown"} people
+                                </div>
                             </div>
                         </div>
-                    ))
-                }
-            </div>
-            {/* Show button at the bottom only when countries are displayed */}
+                    ))}
+                    <ScrollIndicator containerRef={contentRef} delay={3000} />
+                </div>
+            )}
+
             {shouldDisplayCountries(countries.length, showCountries) && (
                 <div className="btn-wrapper bottom-button">
                     <CountryButton
