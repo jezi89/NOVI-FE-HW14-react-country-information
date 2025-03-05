@@ -4,7 +4,7 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 5px;
     position: relative;
     z-index: 5; /* Ensure it appears above the map */
 }
