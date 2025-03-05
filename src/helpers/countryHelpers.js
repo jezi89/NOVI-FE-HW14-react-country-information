@@ -18,7 +18,7 @@ export function longCountryNameHelper(name) {
 
 export function setCountryButtonHelper(countriesLength, showCountries) {
     return countriesLength === 0 ? "Fetch All Countries" :
-        showCountries ? "Hide Countries ↑" : "Show Countries ↓";
+        showCountries ? "Hide Countries ↑" : "Show All Countries ↓";
 }
 
 // You can add more helper functions here as needed

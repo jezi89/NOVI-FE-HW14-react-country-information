@@ -3,11 +3,11 @@
 /* CSS VARIABLES */
 :root {
     /* Colors */
-    --primary-color: #4CAF50;
-    --secondary-color: #ff0616;
+    --primary-color: #053225;
+    --secondary-color: #a91101;
     --text-color: white;
     --border-color: #ddd;
-    --background-color: white;
+    --background-color: #e6e6e9;
 
     /* Typography */
     --font-family: 'Roboto Condensed', sans-serif;
@@ -52,7 +52,6 @@ body::-webkit-scrollbar {
 }
 
 /* FULL SCREEN LAYOUT */
-/* Add this to App.css */
 .full-screen-overlay {
     position: fixed;
     top: 0;
@@ -71,7 +70,7 @@ body::-webkit-scrollbar {
     border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
-    background: white;
+    background: var(--background-color);
     z-index: 1001;
 }
 
@@ -99,7 +98,8 @@ body::-webkit-scrollbar {
     box-sizing: border-box;
 }
 
-.full-screen-button {
+/* Shared button styles */
+.button {
     background-color: var(--primary-color);
     color: var(--text-color);
     border: none;
@@ -110,6 +110,30 @@ body::-webkit-scrollbar {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+    background-color: #195339; /* Darker shade of green */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Specific button styles */
+.country-button {
+    composes: button;
+}
+
+.full-screen-button {
+    composes: button;
+}
+
+.country-button.active {
+    background-color: var(--secondary-color);
 }
 
 /* BUTTON WRAPPER STYLES */

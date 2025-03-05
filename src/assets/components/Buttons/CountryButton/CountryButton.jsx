@@ -1,6 +1,6 @@
 // src/assets/components/CountryButton/CountryButton.jsx
 import React from 'react';
-import {shouldDisplayCountries, setCountryButtonHelper} from '../../../helpers/countryHelpers.js';
+import {shouldDisplayCountries, setCountryButtonHelper} from '../../../../helpers/countryHelpers.js';
 import './CountryButton.css'; // Fixed CSS import path
 
 function CountryButton({onClick, countriesLength, showCountries, className = ""}) {

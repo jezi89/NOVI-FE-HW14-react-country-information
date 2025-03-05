@@ -3,10 +3,12 @@ import {useRef, useState} from 'react';
 import './App.css';
 import axios from 'axios';
 import {shouldDisplayCountries} from './helpers/countryHelpers';
-import CountryButton from "./assets/components/CountryButton/CountryButton.jsx";
+import CountryButton from "./assets/components/Buttons/CountryButton/CountryButton.jsx";
+import FullScreenButton from "./assets/components/Buttons/FullScreenButton/FullScreenButton.jsx";
 import {scrollToTop, smoothScrollTo} from './helpers/scrollHelper.js';
 import CountryGrid from './assets/components/CountryGrid/CountryGrid.jsx';
 import WorldMap from './assets/components/WorldMap/WorldMap.jsx';
+import {SearchBar} from "./assets/components/SearchBar/SearchBar.jsx";
 
 function App() {
     const [countries, setCountries] = useState([]);
@@ -17,7 +19,8 @@ function App() {
     async function fetchCountryData() {
         try {
             if (!countries.length) {
-                const result = await axios.get('https://restcountries.com/v3.1/all?fields=flags,name,population,continents');
+                setShowCountries(false); // Hide countries while loading
+                const result = await axios.get('/api/all?fields=flags,name,population,continents');
                 const sortedCountries = result.data.sort((a, b) =>
                     (b.population || 0) - (a.population || 0)
                 );
@@ -53,7 +56,9 @@ function App() {
                 }
             }
         } catch (e) {
-            console.error(e);
+            console.error("Failed to fetch countries:", e);
+            alert("Failed to load countries. Please try again later.");
+        
         }
     }
 
@@ -66,10 +71,9 @@ function App() {
     }
 
     return (
-
         <div className="container">
             <WorldMap/>
-
+            <SearchBar/>
             <div className={`btn-wrapper ${showCountries ? "after-scroll" : ""}`} id="button-section">
                 <CountryButton
                     onClick={fetchCountryData}
@@ -87,15 +91,13 @@ function App() {
 
             {shouldDisplayCountries(countries.length, showCountries) && (
                 <div className="btn-wrapper bottom-button">
-                    <button
-                        className="full-screen-button"
-                        onClick={toggleFullScreen}>
-                        Show Full Screen
-                    </button>
+                    <FullScreenButton
+                        onClick={toggleFullScreen}
+                        isFullScreen={isFullScreen}
+                    />
                 </div>
             )}
             <div id="content-spacer" style={{height: 0}}></div>
-            {/* Add the full screen overlay component here */}
             {isFullScreen && (
                 <div className="full-screen-overlay">
                     <div className="full-screen-header">

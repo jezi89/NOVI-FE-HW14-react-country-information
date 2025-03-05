@@ -1,6 +1,6 @@
 // src/assets/components/WorldMap/WorldMap.jsx
 import React from 'react';
-import IMAGES from "../../Images.jsx"; // Corrected path
+import IMAGES from "../../Images.jsx";
 import './WorldMap.css';
 
 function WorldMap() {
