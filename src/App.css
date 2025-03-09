@@ -1,0 +1,166 @@
+/* App.css - Cleaned up version */
+
+/* CSS VARIABLES */
+:root {
+    /* Colors */
+    --primary-color: #053225;
+    --secondary-color: #a91101;
+    --text-color: white;
+    --border-color: #ddd;
+    --background-color: #e6e6e9;
+
+    /* Typography */
+    --font-family: 'Roboto Condensed', sans-serif;
+
+    /* Spacing */
+    --spacing-sm: 10px;
+    --spacing-md: 20px;
+    --spacing-lg: 30px;
+    --spacing-xl: 40px;
+
+    /* Layout */
+    --container-max-width: 1400px;
+
+    /* Animation */
+    --transition-duration: 0.8s;
+}
+
+/* GLOBAL STYLES */
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+/* LAYOUT STRUCTURE */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* FULL SCREEN LAYOUT */
+.full-screen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.full-screen-header {
+    padding: 15px;
+    display: flex;
+    justify-content: flex-end;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    background: var(--background-color);
+    z-index: 1001;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--primary-color);
+}
+
+.full-screen-content {
+    padding: 10px;
+}
+
+.full-screen-content .country-grid {
+    max-width: 95%; /* Even wider in fullscreen */
+    max-height: 90vh; /* Use more vertical space in fullscreen */
+    padding: 5px; /* Minimal padding in fullscreen */
+}
+
+/* Fix for right-side borders */
+.country-item {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Shared button styles */
+.button {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+    background-color: #195339; /* Darker shade of green */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Specific button styles */
+.country-button {
+    composes: button;
+}
+
+.full-screen-button {
+    composes: button;
+}
+
+.country-button.active {
+    background-color: var(--secondary-color);
+}
+
+/* BUTTON WRAPPER STYLES */
+.btn-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: var(--spacing-md) 0;
+    position: relative;
+    z-index: 3;
+    transition: margin var(--transition-duration) ease;
+}
+
+.btn-wrapper.after-scroll {
+    margin-top: var(--spacing-xl);
+}
+
+.btn-wrapper.bottom-button {
+    margin: var(--spacing-lg) 0;
+}
+
+/* UTILITIES */
+#content-spacer {
+    width: 100%;
+    transition: height var(--transition-duration) ease;
+}
+
+.hide {
+    display: none;
+}

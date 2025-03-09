@@ -1,0 +1,57 @@
+.country-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px;
+    box-sizing: border-box;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+/* Make sure fullscreen version has proper width */
+.full-screen-content .country-grid {
+    max-width: 100%;
+}
+/* Specifieke breakpoints met kleinere minimale breedte */
+@media (min-width: 1200px) {
+    .country-grid {
+        grid-template-columns: repeat(5, minmax(160px, 1fr));
+    }
+}
+
+@media (max-width: 1199px) and (min-width: 900px) {
+    .country-grid {
+        grid-template-columns: repeat(4, minmax(160px, 1fr));
+    }
+}
+
+@media (max-width: 899px) and (min-width: 600px) {
+    .country-grid {
+        grid-template-columns: repeat(3, minmax(160px, 1fr));
+    }
+}
+
+@media (max-width: 599px) and (min-width: 400px) {
+    .country-grid {
+        grid-template-columns: repeat(2, minmax(160px, 1fr));
+    }
+}
+
+@media (max-width: 399px) {
+    .country-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Ensure horizontal content doesn't cause overflow */
+.country-card {
+    width: 100%;
+    box-sizing: border-box;
+}
